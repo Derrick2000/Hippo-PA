@@ -1,5 +1,4 @@
 import openai
-#from openaikey import OPENAI_API_KEY 
 import os
 
 class HIPAgent:
@@ -39,4 +38,4 @@ class HIPAgent:
                 return i
 
         # If the response does not match any answer choice, return -1.
-        return 0
+        return -1
