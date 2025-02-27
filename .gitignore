@@ -5,5 +5,8 @@
 __pycache__/
 *.pyc
 
-# Ignore the textbook.txt file
-textbook.txt
+# Ignore .txt file
+*.txt
+
+# Ignore .pkl file
+*.pkl

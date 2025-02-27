@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Question Interface</title>
+</head>
+<body>
+  <h1>Ask a Question</h1>
+  <h3>Format: Question, Answer1, Answer2, Answer3 (Optional), Answer4 (Optional)</h3>
+  <textarea id="question" placeholder="Question" style="width: 100%; height: 150px;"></textarea>  
+  <br>
+  <button onclick="submitQuestion()">Submit</button>
+  
+  <h2>Answer:</h2>
+  <div id="output" style="border:1px solid #ccc; padding:10px; width:300px; min-height:50px;"></div>
+  
+  <script>
+    function submitQuestion(){
+      const question = document.getElementById("question").value;
+      console.log(question)
+      fetch("http://127.0.0.1:5000/getAnswer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: question })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("output").innerText = data.answer;
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+</html>
