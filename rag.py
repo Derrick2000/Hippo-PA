@@ -29,7 +29,7 @@ def load_or_compute_embeddings(embedding_path, book_chunks):
             print("Loading embeddings from file...")
             return pickle.load(f)
     
-    # Compute embeddings if file doesn't exist
+    # Compute embeddings if file doesn't exist (may take a couple of minutes)
     chunk_embeddings = [get_embedding(chunk) for chunk in tqdm(book_chunks, desc="Generating Embeddings")]
     
     # Save embeddings to file

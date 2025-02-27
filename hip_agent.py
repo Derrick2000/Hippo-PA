@@ -10,7 +10,7 @@ class HIPAgent:
         self.book_chunks = rag.load_and_split_book('textbook.txt',n=4)
         self.chunk_embeddings = rag.load_or_compute_embeddings('./bio_book_embeddings.pkl', self.book_chunks)
         self.topk_relevance = 3 # how many chunks we would like to include as context for gpt to answer questions
-        self.answer_iteration = 7 # how many times we want gpt to generate the answer for a question so that we have a more consistent output
+        self.answer_iteration = 5 # how many times we want gpt to generate the answer for a question so that we have a more consistent output
 
     
     def get_response(self, question, answer_choices):
