@@ -8,12 +8,8 @@ def get_embedding(text, model="text-embedding-ada-002"):
     response = openai.Embedding.create(input=[text], model=model)
     return response['data'][0]['embedding']
 
-# Read the book from a text file and split into chunks
-# def load_and_split_book(file_path, chunk_size=22000):
-#     with open(file_path, 'r', encoding='utf-8') as file:
-#         text = file.read()
-#     return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
 
+# Function that loads and split the book group by n paragraphs
 def load_and_split_book(file_path, n=5):
     with open(file_path, 'r', encoding='utf-8') as file:
         text = file.read()
@@ -25,8 +21,9 @@ def load_and_split_book(file_path, n=5):
     
     return combined_chunks
 
+# Function that loads embeddings after they are loaded locally
 def load_or_compute_embeddings(embedding_path, book_chunks):
-    # Check if embeddings file exists6
+    # Check if embeddings file exists
     if os.path.exists(embedding_path):
         with open(embedding_path, "rb") as f:
             print("Loading embeddings from file...")
