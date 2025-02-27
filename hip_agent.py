@@ -2,13 +2,15 @@ import openai
 import rag
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from collections import Counter
 
 class HIPAgent:
     def __init__(self):
         # Load book chunks from 'textbook.txt'
         self.book_chunks = rag.load_and_split_book('textbook.txt',n=4)
         self.chunk_embeddings = rag.load_or_compute_embeddings('./bio_book_embeddings.pkl', self.book_chunks)
-        self.topk_relevance = 3
+        self.topk_relevance = 3 # how many chunks we would like to include as context for gpt to answer questions
+        self.answer_iteration = 7 # how many times we want gpt to generate the answer for a question so that we have a more consistent output
 
     
     def get_response(self, question, answer_choices):
@@ -70,16 +72,21 @@ class HIPAgent:
                   "Your final answer must be one of the A, B, C, D, without any additional characters or symbols. "
                 )
         # Call the OpenAI 3.5 API to get the answer.
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt.format(context_info=context_info, question=question, answer_str=answer_str)},
-            ],
-            temperature=0.,
-            top_p=0.45
-        )
-        response_text = response.choices[0].message.content
-        response_selection = response_text.split('Answer:')[-1].strip().replace('.','').split(' ')[0]
+        response_selection_all = []
+        for _ in range(answer_iteration):
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": prompt.format(context_info=context_info, question=question, answer_str=answer_str)},
+                ],
+                temperature=0.,
+                top_p=0.45
+            )
+            response_text = response.choices[0].message.content
+            response_selection = response_text.split('Answer:')[-1].strip().replace('.','').split(' ')[0]
+            response_selection_all.append(response_selection)
+        response_selection = Counter(response_selection_all).most_common(1)[0][0]
+
 
         # Match the response to one of the answer choices.
         for i, answer_choice in enumerate(['A','B','C','D']):
