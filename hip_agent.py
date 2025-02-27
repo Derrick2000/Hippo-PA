@@ -73,7 +73,7 @@ class HIPAgent:
                 )
         # Call the OpenAI 3.5 API to get the answer.
         response_selection_all = []
-        for _ in range(answer_iteration):
+        for _ in range(self.answer_iteration):
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[

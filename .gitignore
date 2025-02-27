@@ -9,4 +9,4 @@ __pycache__/
 *.txt
 
 # Ignore .pkl file
-#*.pkl
+*.pkl
